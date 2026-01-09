@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 //역할(role-인가) : user, manager, admin
 
 @Log4j2
-//@Controller - 각 메서드가 view를 리턴한다.
-@RestController
+@Controller
 public class IndexController {
     @GetMapping({"", "/"})
-    public String home(){
-        log.info("home");
-        return "home";
+    public String index(){
+        log.info("index");
+        //-> /WEB-INF/views/{{index}}.jsp
+        //어노테이션이 RestController에서 Controller로 변경됨
+        //@RestController = @Controller + @ResponseBody -> 문자열 포맷
+        //@Controller => 문자열이 출력으로 나갈 화면 이름이다.
+        return "index";// -> ViewResolver
     }
     @GetMapping("/user")
     public String user(){
