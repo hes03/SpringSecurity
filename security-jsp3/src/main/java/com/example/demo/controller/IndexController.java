@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.auth.PrincipalDetails;
 import com.example.demo.model.User;
 import com.example.demo.service.MemberService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +37,16 @@ public class IndexController {
         model.addAttribute("role", role);
         return "redirect:/index.jsp";// -> ViewResolver
     }//end of home
+    @GetMapping("/info")
+    public @ResponseBody String info(Authentication authentication){
+        //세션정보를 Authentication이 쥐고 있다.
+        //Authentication안에는 반드시 UserDetails타입만 담을 수 있다.
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        log.info("username : " + principalDetails.getUsername());
+        log.info("password : " + principalDetails.getPassword());
+        log.info("email : " + principalDetails.getEmail());
+        return "Authentication에서 꺼낸"+principalDetails.getUsername();
+    }
     //http://localhost:8000/user
     //@RestController =  @Controller + @ResponseBody
     //@Controller를 사용하면 리턴값 String으로 화면이름을 찾음.
